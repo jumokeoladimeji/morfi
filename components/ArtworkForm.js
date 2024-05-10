@@ -52,7 +52,7 @@ const ArtworkForm = () => {
                     body: dataObj
                 });
                 response = await response.json();
-                saveAs(qrImageUrl, `${artworkName}-qrcode.png`);
+                saveAs(qrImageUrl, `${artworkName}-by-${artistName}-qrcode.png`);
             }
         } catch (error) {
             // Handle error if necessary
