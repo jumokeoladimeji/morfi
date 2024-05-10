@@ -44,7 +44,7 @@ const ArtworkForm = () => {
                     artWorkURL,
                     artworkName,
                     description,
-                    cloudinaryUrl
+                    cloudinaryUrl: imageUrl.url
                 })
                 console.log('dataObj', dataObj)
                 let response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/artwork-details`, {
