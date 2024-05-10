@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.19",
     "cloudinary": "^2.2.0",
     "file-saver": "^2.0.5",
     "mongodb": "^6.6.1",
