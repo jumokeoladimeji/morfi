@@ -1,7 +1,9 @@
 import { useState} from "react";
 import { saveAs } from 'file-saver';
+import { useRouter } from 'next/router';
 
 export default function Artworks({ artworks }) {
+    const router = useRouter();
 //   const [artworkData, setArtworks] = useState([]);
 //   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,6 +28,16 @@ export default function Artworks({ artworks }) {
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{artwork.description}</p>
                         <p>View on the website: {artwork.artWorkURL}</p>
                     </div>
+                    <button
+                        onClick={() =>
+                            router.push(
+                                `/artworks/${artwork?._id}`,
+                            )
+                        }
+                        className="bg-[#7b7c7c] hover:bg-[#005438ee] text-white py-1 px-2 rounded-md mr-2"
+                    >
+                        View
+                    </button>
                     {/* <button
                         className="flex flex-col mt-10 bg-yellow-800 hover:bg-yellow-600 text-white font-bold py-2 px-4 w-full rounded"
                         onClick={downloadQRCode(artwork)}
