@@ -29,8 +29,9 @@ const ArtworkForm = () => {
         saveAs(qrImageUrl, 'qrcode.png');
     };
 
-    const downloadQRCode = async () => {
+    const generateAndDownloadQRCode = async () => {
         setIsLoading(true)
+        await handleGenerateQR();
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/uploadQRCode`, {
                 method: 'POST',
@@ -115,18 +116,19 @@ const ArtworkForm = () => {
                                     <div  className="items-center py-2">
                                         <button
                                             className="bg-yellow-800 hover:bg-yellow-600 text-white font-bold py-2 px-4 w-full rounded"
-                                            onClick={handleGenerateQR}
+                                            onClick={generateAndDownloadQRCode}
+                                            disabled={isLoading}
                                         >
-                                            Generate QR Code
+                                           {isLoading ? 'Loading...' : 'Generate And Download PNG'}
                                         </button>
-                                        <button
+                                        {/* <button
                                             className="mt-10 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
-                                            onClick={downloadQRCode}
+                                            onClick={generateAndDownloadQRCode}
                                             disabled={!qrImageUrl || isLoading}
                                         >
-                                            {isLoading ? 'Loading...' : 'Save And Download PNG'}
+                                            {isLoading ? 'Loading...' : 'Generate And Download PNG'}
                                             
-                                        </button>
+                                        </button> */}
                                         {qrImageUrl && <img src={qrImageUrl} alt="QR Code" />}
                                     </div>
                                 </div>
@@ -138,5 +140,28 @@ const ArtworkForm = () => {
         </article>
     );
 };
+
+export async function getServerSideProps(ctx) {
+	// try {
+        const response = await fetch(`http://localhost:3000/api/artwork-details`);
+    
+            console.log('response:::', response)
+    //   if (response.ok) {
+            const artworks = await response.json();
+            // setArtworks(data)
+            // setIsLoading(true)
+            return { props: { artworks: [{ artistName: 'name',
+                id: 1,
+                artWorkURL: 'joy',
+                artworkName: 'same',
+                description: 'it is going well',
+                cloudinaryUrl: 'ima'}] } };
+        // }
+
+    // } catch (error) {
+    //         // Handle error if necessary
+    //         console.error(error)
+    // }
+}
 
 export default ArtworkForm;
