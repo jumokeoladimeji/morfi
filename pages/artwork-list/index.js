@@ -47,8 +47,6 @@ export async function getServerSideProps(ctx) {
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/artwork-details`);
         if (response.ok) {
             const artworks = await response.json();
-            // setArtworks(artworks.data)
-            // setIsLoading(true)
             return { props: { artworks: artworks.data }}
         }
     
