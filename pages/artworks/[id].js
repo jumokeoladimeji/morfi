@@ -43,10 +43,10 @@ export default function Artwork() {
                         src={artwork?.cloudinaryUrl} alt="" 
                     />
                     <div className="flex flex-col justify-between p-4 leading-normal">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {artwork?.artworkName}</h5>
+                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900"> {artwork?.artworkName}</h5>
                         by <span>{artwork?.artistName}</span>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{artwork?.description}</p>
-                        <p><a href={artwork?.artWorkURL}>Click to View on the website</a></p>
+                        <p className="mb-3 font-normal text-gray-700">{artwork?.description}</p>
+                        {/* <p><a href={artwork?.artWorkURL}>Click to View on the website</a></p> */}
                     </div>
                 </article>
             </div>

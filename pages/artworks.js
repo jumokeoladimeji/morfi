@@ -1,55 +1,118 @@
 import { useState} from "react";
-import { saveAs } from 'file-saver';
 import { useRouter } from 'next/router';
+import { usePDF } from 'react-to-pdf';
 
-export default function Artworks({ artworks }) {
+export default function ArtworkList({ artworks }) {
     const router = useRouter();
-//   const [artworkData, setArtworks] = useState([]);
-//   const [isLoading, setIsLoading] = useState(false)
+    const [selectedArtworks, setSelectedArtworks] = useState([]);
 
-
-    const downloadQRCode = (artwork) => {
-        // saveAs(artwork.qrImageUrl, `${artwork.artworkName}-by-${artwork.artistName}-qrcode.png`);
-        // setIsLoading(true)
+    const handleSelectAllArtwork = () => {
+        if (selectedArtworks.length < artworks.length) {
+          setSelectedArtworks(artworks.map(({ _id }) => _id));
+        } else {
+          setSelectedArtworks([]);
+        }
     };
 
+    const handleSelectArtwork = (event) => {
+        const artworkId = event.target.value;
+    
+        if (!selectedArtworks.includes(artworkId)) {
+          setSelectedArtworks([...selectedArtworks, artworkId]);
+        } else {
+          setSelectedArtworks(
+            selectedArtworks.filter((selectedArtworkId) => {
+              return selectedArtworkId !== artworkId;
+            })
+          );
+        }
+    };
+
+    const { toPDF, targetRef } = usePDF({
+    	filename: `file.pdf`,
+    });
+
+
   return (
-    <div className="overflow-y-auto mx-auto mx-6 my-6">
-        {artworks && artworks.map((artwork, i) => (
-            <div className="flex flex-col mt-2" key={artwork._id}>
-                <article className="flex m-t-6 items-center bg-gray-100">
-                {/* <a href="#" className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"> */}
-                    <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" 
-                        src={artwork?.cloudinaryUrl && artwork?.cloudinaryUrl} alt="" 
-                    />
-                    <div className="flex flex-col justify-between p-4 leading-normal">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {artwork.artworkName}</h5>
-                        by <span>{artwork.artistName}</span>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{artwork.description}</p>
-                        <p>View on the website: {artwork.artWorkURL}</p>
-                    </div>
-                    <button
-                        onClick={() =>
-                            router.push(
-                                `/artworks/${artwork?._id}`,
-                            )
-                        }
-                        className="bg-[#7b7c7c] hover:bg-[#005438ee] text-white py-1 px-2 rounded-md mr-2"
-                    >
-                        View
-                    </button>
-                    {/* <button
-                        className="flex flex-col mt-10 bg-yellow-800 hover:bg-yellow-600 text-white font-bold py-2 px-4 w-full rounded"
-                        onClick={downloadQRCode(artwork)}
-                        disabled={!artwork?.cloudinaryUrl}
-                    >
-                    Download PNG
-                        
-                    </button> */}
-                {/* </a> */}
-                </article>
-            </div>
-        ))}
+    <div className="mx-6 my-6">
+        {/* <button
+                onClick={() => toPDF()}
+                className="bg-yellow-800 hover:bg-yellow-600 text-white px-4 py-3 rounded-md"
+            >
+                Download Selected (PDF) Files
+		</button> */}
+        <div className=" border-slate-200 rounded-lg p-6 border-2">
+						<div className="flex flex-row justify-between items-center mb-3">
+							<h1
+								style={{ fontFamily: 'Lobster Two' }}
+								className=" text-2xl"
+							>
+							</h1>
+						</div>
+						<div className="overflow-x-auto">
+							<table className="min-w-full border-collapse border border-gray-300">
+								<thead>
+									<tr>
+										<th className="border border-gray-300 px-4 py-2">
+										<input
+											type="checkbox"
+											checked={selectedArtworks.length === artworks.length}
+											onChange={handleSelectAllArtwork}
+										/>
+										Select All
+										</th>
+										<th className="border border-gray-300 px-4 py-2">
+											Image
+										</th>
+										<th className="border border-gray-300 px-4 py-2">
+											Artwork Name
+										</th>
+										<th className="border border-gray-300 px-4 py-2">
+											Artist
+										</th>
+										<th className="border border-gray-300 px-4 py-2">
+											Description
+										</th>
+										<th className="border border-gray-300 px-4 py-2">
+											Actions
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{artworks && artworks.map((artwork, i) => (
+										<tr key={artwork._id}>
+										<td className="border border-gray-300 px-4 py-2">
+											<input
+												type="checkbox"
+												value={artwork._id}
+												checked={selectedArtworks.includes(artwork._id)}
+												onChange={handleSelectArtwork}
+											/>
+											</td>
+                                            <td className="border border-gray-300 px-4 py-2"><img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" 
+                                                src={artwork?.cloudinaryUrl && artwork?.cloudinaryUrl} alt="" 
+                                            /></td>
+                                            <td className="border border-gray-300 px-4 py-2">{artwork.artworkName}</td>
+                                            <td className="border border-gray-300 px-4 py-2">{artwork.artistName}</td>
+                                            <td className="border border-gray-300 px-4 py-2">{artwork.description}</td>
+                                            <td className="border border-gray-300 px-4 py-2">
+                                                <button
+                                                    onClick={() =>
+                                                        router.push(
+                                                            `/artworks/${artwork?._id}`,
+                                                        )
+                                                    }
+                                                    className="bg-[#000] hover:bg-[#7b7c7c] text-white py-1 px-2 rounded-md mr-2"
+                                                >
+                                                    View
+                                                </button>
+                                            </td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
     </div>
   );
 }
