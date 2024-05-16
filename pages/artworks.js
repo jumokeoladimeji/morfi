@@ -1,119 +1,73 @@
-import { useState} from "react";
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { usePDF } from 'react-to-pdf';
+import Table from '../components/Table';
+import { exportSelectedRowsToPDF } from '../utils/exportToPdf';
+
+const data = [
+    { name: 'John Doe', age: 28, address: '123 Main St' },
+    { name: 'Jane Smith', age: 34, address: '456 Maple Ave' },
+    { name: 'Sam Green', age: 45, address: '789 Oak Dr' },
+];
+  
 
 export default function ArtworkList({ artworks }) {
-    const router = useRouter();
-    const [selectedArtworks, setSelectedArtworks] = useState([]);
-
-    const handleSelectAllArtwork = () => {
-        if (selectedArtworks.length < artworks.length) {
-          setSelectedArtworks(artworks.map(({ _id }) => _id));
-        } else {
-          setSelectedArtworks([]);
-        }
-    };
-
-    const handleSelectArtwork = (event) => {
-        const artworkId = event.target.value;
+    // const [selectedArtworks, setSelectedArtworks] = useState([]);
     
-        if (!selectedArtworks.includes(artworkId)) {
-          setSelectedArtworks([...selectedArtworks, artworkId]);
-        } else {
-          setSelectedArtworks(
-            selectedArtworks.filter((selectedArtworkId) => {
-              return selectedArtworkId !== artworkId;
-            })
-          );
-        }
+    const [selectedRows, setSelectedRows] = useState([]);
+    const handleSelectRow = (index) => {
+        setSelectedRows((prev) =>
+          prev.includes(index)
+            ? prev.filter((i) => i !== index)
+            : [...prev, index]
+        );
     };
+    
+    const selectedData = selectedRows.map((index) => artworks[index]);
+    console.log('selectedRows', selectedRows)
+    console.log('selectedData', selectedData)
 
     const { toPDF, targetRef } = usePDF({
-    	filename: `file.pdf`,
+    	filename: 'muliple-qrcodes.pdf',
     });
 
+    return (
+        <div className="mx-6 my-6">
+            <div className=" border-slate-200 rounded-lg p-6 border-2">
+                <div className="justify-between items-center text-center mb-3">
+                    <h1
+                        style={{ fontFamily: 'Lobster Two' }}
+                        className="text-2xl"
+                    >
+                        QRCODES
+                    </h1>
+                </div>
+                <button
+                    // onClick={() => exportSelectedRowsToPDF('selected-rows-to-pdf')}
+                    onClick={() => toPDF()}
+                    className="mt-4 px-4 py-2 bg-[#000] hover:bg-[#7b7c7c] text-white rounded"
+                >
+                    Export Selected Rows to PDF
+                </button>
+                {selectedRows.length > 0 && (
+                <div className='text-center'>
+                    <h1
+                        style={{ fontFamily: 'Lobster Two' }}
+                        className="text-xl"
+                    >
+                        SELECTED ROWS
+                    </h1>
+                    <div id="selected-rows-to-pdf" ref={targetRef}>
+                        <Table data={selectedData} selectedRows={selectedRows} onSelectRow={() => {}} />
+                    </div>
+                </div>
+                )}
+                <div>
+                <div id="table-to-pdf">
+                    <Table data={artworks} selectedRows={selectedRows} onSelectRow={handleSelectRow} />
+                </div></div>
 
-  return (
-    <div className="mx-6 my-6">
-        {/* <button
-                onClick={() => toPDF()}
-                className="bg-yellow-800 hover:bg-yellow-600 text-white px-4 py-3 rounded-md"
-            >
-                Download Selected (PDF) Files
-		</button> */}
-        <div className=" border-slate-200 rounded-lg p-6 border-2">
-						<div className="flex flex-row justify-between items-center mb-3">
-							<h1
-								style={{ fontFamily: 'Lobster Two' }}
-								className=" text-2xl"
-							>
-							</h1>
-						</div>
-						<div className="overflow-x-auto">
-							<table className="min-w-full border-collapse border border-gray-300">
-								<thead>
-									<tr>
-										<th className="border border-gray-300 px-4 py-2">
-										<input
-											type="checkbox"
-											checked={selectedArtworks.length === artworks.length}
-											onChange={handleSelectAllArtwork}
-										/>
-										Select All
-										</th>
-										<th className="border border-gray-300 px-4 py-2">
-											Image
-										</th>
-										<th className="border border-gray-300 px-4 py-2">
-											Artwork Name
-										</th>
-										<th className="border border-gray-300 px-4 py-2">
-											Artist
-										</th>
-										<th className="border border-gray-300 px-4 py-2">
-											Description
-										</th>
-										<th className="border border-gray-300 px-4 py-2">
-											Actions
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									{artworks && artworks.map((artwork, i) => (
-										<tr key={artwork._id}>
-										<td className="border border-gray-300 px-4 py-2">
-											<input
-												type="checkbox"
-												value={artwork._id}
-												checked={selectedArtworks.includes(artwork._id)}
-												onChange={handleSelectArtwork}
-											/>
-											</td>
-                                            <td className="border border-gray-300 px-4 py-2"><img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" 
-                                                src={artwork?.cloudinaryUrl && artwork?.cloudinaryUrl} alt="" 
-                                            /></td>
-                                            <td className="border border-gray-300 px-4 py-2">{artwork.artworkName}</td>
-                                            <td className="border border-gray-300 px-4 py-2">{artwork.artistName}</td>
-                                            <td className="border border-gray-300 px-4 py-2">{artwork.description}</td>
-                                            <td className="border border-gray-300 px-4 py-2">
-                                                <button
-                                                    onClick={() =>
-                                                        router.push(
-                                                            `/artworks/${artwork?._id}`,
-                                                        )
-                                                    }
-                                                    className="bg-[#000] hover:bg-[#7b7c7c] text-white py-1 px-2 rounded-md mr-2"
-                                                >
-                                                    View
-                                                </button>
-                                            </td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					</div>
-    </div>
+            </div>
+        </div>
   );
 }
 
@@ -122,8 +76,6 @@ export async function getServerSideProps(ctx) {
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/artwork-details`);
         if (response.ok) {
             const artworks = await response.json();
-            // setArtworks(artworks.data)
-            // setIsLoading(true)
             return { props: { artworks: artworks.data }}
         }
     

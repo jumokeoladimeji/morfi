@@ -52,7 +52,7 @@ export default function Artwork() {
             </div>
             <button
                 onClick={() => toPDF()}
-                className="bg-yellow-800 hover:bg-yellow-600 text-white px-4 py-3 rounded-md"
+                className="bg-[#000] hover:bg-[#7b7c7c] text-white px-4 py-3 rounded-md"
             >
                 Download (PDF)
 		    </button>
