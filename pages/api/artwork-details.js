@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const collection = await connectToDatabase();
     try {
-      const imageList = await collection.find({}).toArray();
+      const imageList = await collection.find({}).sort({ _id: -1 }).toArray();
       res.status(200).json({ message: 'Data retrieved successfully', data: imageList });
       // return NextResponse.json({ imageList }, { status: 200 });
     } catch (err) {
