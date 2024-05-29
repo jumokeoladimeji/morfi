@@ -128,8 +128,8 @@ const ArtworkForm = () => {
 
     return (
         <article className="w-full max-w-xld rounded-bl-4xl">
-            <div className="selection:bg-yellow-600 selection:text-white rounded-bl-4xl">
-                <div className="min-h-screen bg-yellow-100 flex justify-center items-center">
+            <div className="selection:bg-gray-600 selection:text-white rounded-bl-4xl">
+                <div className="min-h-screen bg-gray-100 flex justify-center items-center">
                     <div className="p-8 flex-1">
                         <div className="w-80 bg-white rounded-3xl mx-auto overflow-hidden shadow-xl">
                             <div className="relative h-24 bg-fff rounded-bl-4xl">
@@ -273,7 +273,7 @@ const ArtworkForm = () => {
                                     </div>
                                     <div  className="items-center py-2">
                                         <button
-                                            className="bg-yellow-800 text-white font-bold py-2 px-4 w-full rounded"
+                                            className="mt-4 mb-4 px-4 py-2 bg-[#000] hover:bg-[#7b7c7c] text-white rounded"
                                             type="submit"
                                             disabled={isLoading}
                                         >
