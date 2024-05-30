@@ -12,7 +12,7 @@ export default async function handler(req, res) {
             const uploadResponse = await cloudinary.uploader.upload(base64Data, {
                 folder: 'nextjs',
             });
-            res.status(200).json({ result: uploadResponse });
+            res.status(200).json({ url: uploadResponse.secure_url })
         } catch (error) {
             console.error('Error uploading QR code to Cloudinary:', error);
             res.status(500).json({ error: 'Internal server error' });
