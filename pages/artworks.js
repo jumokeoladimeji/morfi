@@ -24,12 +24,12 @@ export default function ArtworkList({ artworks }) {
 
     if (artworks) {
         return (
-            <div className="mx-6 my-6">
+            <div className="mx-6 my-6 dark:text-white bg-white">
                 <div className="border-slate-200 rounded-lg p-6 border-2">
                     <div className="justify-between items-center text-center mb-3">
                         <h1
                             style={{ fontFamily: 'Lobster Two' }}
-                            className="text-2xl"
+                            className="text-2xl text-gray-800"
                         >
                             TAGS
                         </h1>

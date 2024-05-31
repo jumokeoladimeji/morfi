@@ -21,7 +21,7 @@ const Card = ({ data }) => {
         {data.map((artwork, i) => (
             <div key={i} className='mb-4'>
                 {/* <a href="#" className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"> */}
-                <div className="items-center text-left bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                <div className="items-center text-left bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-400"
                     // onClick={() =>
                     //     router.push(
                     //         `/artworks/${artwork?._id}`,
@@ -30,7 +30,7 @@ const Card = ({ data }) => {
                 >   
                     <div className="md:flex">
                         <div className="mt-4 md:mt-0">
-                            <h4 className="mb-2 mt-10 ml-10 mr-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{artwork.artworkName} by <i>{artwork.artistName}</i></h4>
+                            <h4 className="mb-2 mt-10 ml-10 mr-5 text-2xl font-bold tracking-tight text-gray-900">{artwork.artworkName} by <i>{artwork.artistName}</i></h4>
                             {/* <div className="uppercase tracking-wide text-sm text-indigo-600 font-bold">{artwork.artworkName} by <i>{artwork.artistName}</i></div> */}
                             {/* <a href="#" className="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">Finding customers for your new business</a> */}
                         </div>
@@ -41,42 +41,42 @@ const Card = ({ data }) => {
                     <div className="flex flex-col justify-between p-4 leading-normal">
                         {/* <div className=''>
                             <h4 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{artwork.artworkName} by <i>{artwork.artistName}</i></h4>
-                            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400"></p>
+                            <p className="mb-3 font-normal text-gray-800"></p>
                         </div> */}
                         <div className='m-2'>
-                            {artwork.medium && <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{artwork.medium}</p>}
+                            {artwork.medium && <p className="mb-3 font-normal text-gray-800">{artwork.medium}</p>}
                         </div>
                         <div className='m-2'>
-                            {(artwork.length && artwork.width) && <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{artwork.width} x {artwork.length}cm</p>}
+                            {(artwork.length && artwork.width) && <p className="mb-3 font-normal text-gray-800">{artwork.width} x {artwork.length}cm</p>}
                         </div>
                         <div className='m-2'>
-                            {artwork.price && <h4 className="mb-3 font-normal text-gray-700 dark:text-gray-400 text-2xl"><b>£{artwork.price}</b></h4>}
+                            {artwork.price && <h4 className="mb-3 font-normal text-gray-800 text-2xl"><b>£{artwork.price}</b></h4>}
                         </div>
                         <div className='m-2'>
                         {(artwork.rarity === 'Rare' || artwork.rarity === 'Original')
                             ? <div>
-                                <p>{artwork.rarity}</p>
-                                <p>Label: 1 of 1</p>
+                                <p className="mb-3 font-normal text-gray-800">{artwork.rarity}</p>
+                                <p className="mb-3 font-normal text-gray-800">Label: 1 of 1</p>
                               </div>
                             : artwork.rarity === 'Limited' 
                             ? (
                               <div>
-                                <p>{artwork.rarity}</p>
-                                <p>Label: {artwork.labelTag} of {artwork.totalTags}</p>
+                                <p className="mb-3 font-normal text-gray-800">{artwork.rarity}</p>
+                                <p className="mb-3 font-normal text-gray-800">Label: {artwork.labelTag} of {artwork.totalTags}</p>
                                 </div>
                             ) 
                             : (
                             <div>
-                            <p>{artwork.rarity}</p>
+                                <p className="mb-3 font-normal text-gray-800">{artwork.rarity}</p>
                             </div>
                             )
                         }
                         </div>
                         <div className='m-2'>
-                            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{artwork.description}</p>
+                            <p className="mb-3 font-normal text-gray-800">{artwork.description}</p>
                         </div>
                         <div className='m-2'>
-                            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">www.art.africa</p>
+                            <p className="mb-3 font-normal text-gray-800">www.art.africa</p>
                         </div>
                     </div>
                     {/* <button
