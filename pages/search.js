@@ -1,19 +1,33 @@
-// pages/search.js
 import { useState } from 'react';
-import { searchProducts } from '../lib/woocommerce';
 import SearchCard from '../components/SearchCard';
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [error, setError] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
-    const products = await searchProducts(searchTerm);
-    console.log('products', products)
-    setResults(products);
-    setDropdownVisible(true);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSelectedProduct(null);
+    try {
+      const response = await fetch(`/api/ecommerce?searchTerm=${searchTerm}`);
+
+      if (!response.ok) {
+        throw new Error(`Error fetching author: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setResults(data.data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setDropdownVisible(true);
+      setLoading(false);
+    }
   };
 
   const handleSelectProduct = (product) => {
@@ -24,17 +38,21 @@ const Search = () => {
   return (
     <div>
       <h1>Search Artworks</h1>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search for products..."
-        className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md focus:border-gray-700 focus:ring-gray-800 focus:outline-none focus:ring focus:ring-opacity-40"
-      />
-      <button onClick={handleSearch} className="mt-2 px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-600">
-        Search Artwork
-      </button>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for products..."
+          className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md focus:border-gray-700 focus:ring-gray-800 focus:outline-none focus:ring focus:ring-opacity-40"
+        />
+        <button type="submit" className="mt-2 px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-600">
+          Search Artwork
+        </button>
+      </form>
 
+      {loading && <p>Loading...</p>}
+      {(!loading && results.length > 0 ) && <div>
       <div className="relative mt-4">
         <label id="listbox-label" className="block text-sm font-medium leading-6 text-gray-900">Artworks</label>
         <div className="relative mt-2">
@@ -52,7 +70,8 @@ const Search = () => {
                 <span className="ml-3 block truncate">{selectedProduct.name}</span>
               </span>
             ) : (
-              <span className="ml-3 block truncate">Select a product</span>
+              <span className="ml-3 block truncate">Select An artwork </span>
+              
             )}
             <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
               <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -100,6 +119,7 @@ const Search = () => {
           <SearchCard artwork={selectedProduct} />
         </div>
       )}
+    </div>}
     </div>
   );
 };
