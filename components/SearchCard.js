@@ -20,12 +20,12 @@ const SearchCard = ({ artwork }) => {
 
     const artworkDetails = {
         artworkName: artwork?.name,
-        artistName: artwork?.author?.title?.rendered,
+        artistName: artwork?.author?.title?.rendered ?? (artwork?.author?.first_name && artwork?.author?.last_name ?
+            `${artwork?.author?.first_name} ${artwork?.author?.last_name}` : null),
         artWorkURL: artwork?.permalink,
         description: parsedDescription,
         // medium: artwork?.name
     }
-
     const rarity = artwork?.categories[artwork.categories.length - 1]?.name;
 
     useEffect(() => {
