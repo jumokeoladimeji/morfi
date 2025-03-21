@@ -18,12 +18,11 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const collection = await connectToDatabase();
     try {
-      const imageList = await collection.find({}).sort({ _id: -1 }).toArray();
-      res.status(200).json({ message: 'Data retrieved successfully', data: imageList });
-      // return NextResponse.json({ imageList }, { status: 200 });
+        const imageList = await collection.find({}).sort({ _id: -1 }).toArray();
+        res.status(200).json({ message: 'Data retrieved successfully', data: imageList });
     } catch (err) {
-      res.status(500).json({ message: 'Error retrieving data' });
-      // return NextResponse.json({ message: "Error", err }, { status: 500 });
+        console.error('Error retrieving data:', err.message); // Detailed error logging
+        res.status(500).json({ message: 'Error retrieving data', error: err.message }); // Returning error details
     }
   }
   else {
