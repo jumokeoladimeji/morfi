@@ -56,77 +56,31 @@ export default function ArtworkList({ artworks }) {
 }
 
 export async function getServerSideProps(ctx) {
-    // console.log('testdata', testdata)
-    const testdata = [
-        { 
-            id:'664a611d5c5484f3c9cc2b7c',
-            artistName: "Femi Odunlami",
-            artWorkURL: "https://staging.art.africa/oluwashogo-ajayi-2/artwork/omobolanle-iv-a-…",
-            artworkName: "Test Art",
-            description:
-            "This artwork is a poignant portrait rendered primarily in monochromatic tones, with strategic uses of color to highlight and contrast elements of the image. It depicts a young girl with her finger gently placed to her lips, a universal gesture that suggests silence or contemplation. Her expression is serene yet intense, with eyes that seem to gaze directly at the viewer, creating an immediate emotional connection. The background and the girl's clothing are washed in a sepia-like tone, reminiscent of aged photographs, which adds a timeless quality to the piece. The use of black and white for the girl's features sharply contrasts with the muted background, emphasizing her expression and the details of her face and headscarf. Splashes of purple and strokes of darker colors drape her shoulders and upper body, suggesting a garment or a shadow. The artwork's simplicity in its color palette belies the complexity of its emotional and visual impact. A solitary bird, drawn in a minimalistic style, soars above her head, adding a layer of symbolism perhaps indicative of freedom or aspiration. The drip marks and the uneven edges of the colors contribute to a raw, organic feel, enhancing the overall emotiveness of the piece. This painting could be interpreted in various ways but fundamentally speaks to themes of innocence, introspection, and perhaps the quiet strength found in stillness. It is a powerful example of how visual art can evoke storytelling and profound emotional responses from its audience.",
-            cloudinaryUrl:
-            "https://res.cloudinary.com/dpulrbzww/image/upload/v1716989409/me9jryacjaic6a1yjpjv.png",
-            labelTag:
-            "",
-            length:
-            "15",
-            price:
-            "80",
-            rarity:
-            "Rare",
-            width:
-            "23",
-            medium: "acrylic"
-        },
-        { 
-            id:'664a1d5c5484f3c9cc2b7c',
-            artistName: "Art.Africa Studio",
-            artWorkURL: "https://staging.art.africa/oluwashogo-ajayi-2/artwork/omobolanle-iv-a-…",
-            artworkName: "The First Sanctuary",
-            description:
-            "This artwork is a poignant portrait rendered primarily in monochromati…",
-            cloudinaryUrl:
-            "https://res.cloudinary.com/dpulrbzww/image/upload/v1716989409/me9jryacjaic6a1yjpjv.png",
-            labelTag:
-            "",
-            length:
-            "15",
-            price:
-            "80",
-            rarity:
-            "Rare",
-            width:
-            "23",
-            medium: "Acrylic /oil painting on Canvas"
-        },
-        { 
-            id:'664a611d5c5484cc2b7c',
-            artistName: "Debabrata Artist",
-            artWorkURL: "https://staging.art.africa/oluwashogo-ajayi-2/artwork/omobolanle-iv-a-…",
-            artworkName: "Debu’s Art Work",
-            description:
-            "A very successful, wealthy lawyer, Edward Lewis (Richard Gere), hires a beautiful and unlikely prostitute, Vivian Ward (Julia Roberts), from Sunset Blvd to bring along to various business events. An attraction develops between the two, and Edward finds it harder and harder to let the infectious, kind-heart Vivian go.",
-            cloudinaryUrl:
-            "https://res.cloudinary.com/dpulrbzww/image/upload/v1716989409/me9jryacjaic6a1yjpjv.png",
-            labelTag:
-            "",
-            length:
-            "15",
-            price:
-            "80",
-            rarity:
-            "Rare",
-            width:
-            "23",
-            medium: "35mm film|-|Acrylic|-|Adire"
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/artwork-details`);
+
+        if (!response.ok) {
+            console.error(`Error fetching artworks: ${response.statusText} (${response.status})`);
+            return {
+                props: {
+                    artworks: [],
+                    ok: false,
+                    reason: `Failed to fetch artworks: ${response.statusText}`
+                }
+            };
         }
-    ]
-	// try {
-    // const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/artwork-details`);
-    // if (response.ok) {
-    //     const artworks = await response.json();
-    //     return { props: { artworks: artworks.data }}
-    // }
-    return { props: { artworks: testdata }}
+
+        const artworks = await response.json();
+        return { props: { artworks: artworks.data, ok: true } };
+    } catch (error) {
+        console.error('Network or server error:', error.message);
+        console.error('Full error details:', error);
+        return {
+            props: {
+                artworks: [],
+                ok: false,
+                reason: 'An error occurred while fetching artworks.'
+            }
+        };
+    }
 }
