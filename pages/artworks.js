@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
 import { usePDF } from 'react-to-pdf';
 import ResumeCard from '../components/ResumeCard';
+import Tag from '../components/Tag';
 
 export default function ArtworkList({ artworks }) {
-    // const [selectedArtworks, setSelectedArtworks] = useState([]);
     
     const [selectedRows, setSelectedRows] = useState([]);
     const handleSelectRow = (index) => {
         setSelectedRows((prev) =>
-          prev.includes(index)
-            ? prev.filter((i) => i !== index)
-            : [...prev, index]
+          prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
         );
     };
     
     const selectedData = selectedRows.map((index) => artworks[index]);
-    console.log('selectedRows', selectedRows)
-    console.log('selectedData', selectedData)
+
+    const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
     const { toPDF, targetRef } = usePDF({
-    	filename: 'muliple-qrcodes.pdf',
+      filename: `multiple-tags-${currentDate}.pdf`,
     });
+  
 
     if (artworks) {
         return (
@@ -35,15 +34,26 @@ export default function ArtworkList({ artworks }) {
                         </h1>
                     </div>
                     <button
-                        // onClick={() => exportSelectedRowsToPDF('selected-rows-to-pdf')}
                         onClick={() => toPDF()}
                         className="mt-4 mb-4 px-4 py-2 bg-[#000] hover:bg-[#7b7c7c] text-white rounded"
                     >
-                        Export To PDF
+                        Export Selected To PDF
                     </button>
                     <div>
+                        <div>
+                            <ResumeCard 
+                                data={artworks}
+                                selectable={true}
+                                selectedIndices={selectedRows}
+                                onSelect={handleSelectRow}
+                            />
+                        </div>
+                        {/* Hidden PDF-only Render */}
+                        <p className='text-xl font-bold'>SELECTED TAGS</p>
                         <div id="table-to-pdf" ref={targetRef}>
-                            <ResumeCard data={artworks} />
+                            <div ref={targetRef}>
+                                <Tag data={selectedData} />
+                            </div>
                         </div>
                     </div>
 
